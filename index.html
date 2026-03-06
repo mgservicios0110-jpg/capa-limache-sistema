@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SACE - Centro de Capacitación Limache</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #003366;
+            --secondary-gold: #ffcc00;
+            --light-bg: #f4f7f6;
+            --white: #ffffff;
+            --text-dark: #333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        body { background-color: var(--light-bg); color: var(--text-dark); }
+
+        /* Header & Logo Section */
+        header {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-placeholder {
+            font-weight: 600;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .logo-placeholder span { color: var(--secondary-gold); }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background: var(--white);
+            padding: 10px;
+            border-bottom: 2px solid var(--secondary-gold);
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: var(--primary-blue);
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        nav button i { font-size: 1.2rem; margin-bottom: 3px; }
+
+        /* Main Content */
+        main { padding: 20px; max-width: 800px; margin: auto; }
+
+        .card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        h2 { color: var(--primary-blue); margin-bottom: 15px; font-size: 1.2rem; border-left: 4px solid var(--secondary-gold); padding-left: 10px; }
+
+        /* Forms & Inputs */
+        select, input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .btn-submit {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Attendance List */
+        .student-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        input:checked + .slider { background-color: #28a745; }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        /* Sections Toggle */
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.5s; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-placeholder">CAPA <span>LIMACHE</span></div>
+    <p style="font-size: 0.7rem;">Sistema de Gestión Académica Digital</p>
+</header>
+
+<nav>
+    <button onclick="showSection('asistencia')"><i class="fas fa-user-check"></i>Asistencia</button>
+    <button onclick="showSection('notas')"><i class="fas fa-graduation-cap"></i>Notas</button>
+    <button onclick="showSection('formativo')"><i class="fas fa-book"></i>Plan</button>
+    <button onclick="showSection('config')"><i class="fas fa-cog"></i>Panel</button>
+</nav>
+
+<main id="app">
+    <section id="asistencia" class="section active">
+        <div class="card">
+            <h2>Control de Asistencia</h2>
+            <select id="curso-select" onchange="updateStudents()">
+                <option value="">Seleccione Curso...</option>
+                <option value="cont-com">Contabilidad Comercial</option>
+                <option value="comp-bas">Computación Básica</option>
+                <option value="exc-av">Excel Avanzado</option>
+                <option value="arm-pc">Armado y Desarmado PC</option>
+            </select>
+            
+            <div id="lista-estudiantes">
+                <p style="text-align: center; color: #888;">Seleccione un curso para pasar lista</p>
+            </div>
+            
+            <textarea placeholder="Observaciones de la clase (Ej: Materia impartida, dudas generales...)"></textarea>
+            <button class="btn-submit" onclick="saveData('Asistencia')">Guardar Registro</button>
+        </div>
+    </section>
+
+    <section id="notas" class="section">
+        <div class="card">
+            <h2>Registro de Calificaciones</h2>
+            <select>
+                <option>Seleccione Alumno...</option>
+                <option>Juan Pérez - Excel Intermedio</option>
+                <option>María Jara - Contabilidad Tributaria</option>
+            </select>
+            <input type="number" step="0.1" placeholder="Nota (1.0 - 7.0)" min="1" max="7">
+            <input type="text" placeholder="Hito evaluado (Ej: Examen Macros Excel)">
+            <button class="btn-submit" onclick="saveData('Notas')">Subir Nota</button>
+        </div>
+    </section>
+
+    <section id="formativo" class="section">
+        <div class="card">
+            <h2>Plan Formativo Técnico</h2>
+            <div id="plan-detalle">
+                <p><strong>Área:</strong> Contabilidad Comercial</p>
+                <ul>
+                    <li>Módulo 1: Introducción a la Normativa </li>
+                    <li>Módulo 2: Libros Auxiliares (Compra/Venta)</li>
+                    <li>Módulo 3: Conciliación Bancaria</li>
+                </ul>
+                <hr style="margin: 15px 0;">
+                <p><strong>Área:</strong> Computación / IT</p>
+                <ul>
+                    <li>Nivel Básico: Windows e Internet</li>
+                    <li>Nivel Avanzado: Armado de Hardware</li>
+                    <li>Plataformas: Zoom, Classroom, Moodle</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function updateStudents() {
+        const list = document.getElementById('lista-estudiantes');
+        const curso = document.getElementById('curso-select').value;
+        
+        if(curso === "") return;
+
+        // Simulación de datos según el área elegida
+        const alumnos = ["Mauricio Galaz", "Claudia Retamales", "Andrés Silva", "Patricia Castro"];
+        list.innerHTML = `<h3>Alumnos Inscritos:</h3>`;
+        
+        alumnos.forEach(nombre => {
+            list.innerHTML += `
+                <div class="student-row">
+                    <span>${nombre}</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            `;
+        });
+    }
+
+    function saveData(tipo) {
+        alert(tipo + " registrado con éxito en la base de datos de CAPA Limache local.");
+    }
+</script>
+
+</body>
+</html>
