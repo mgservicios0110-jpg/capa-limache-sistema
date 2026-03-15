@@ -262,3 +262,65 @@ body { background: var(--bg-main); color: var(--text-main); }
         height: 55px !important; /* Tamaño ajustado para Celulares (no rompe el menú) */
     }
 }
+/* =========================================
+    FOOTER MODERNO MGSERVICIOS (CENTRADO)
+   ========================================= */
+.modern-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    border-top: 1px solid var(--border-light);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+}
+.modern-footer p {
+    margin: 0;
+}
+.modern-footer strong {
+    color: var(--c-dark);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.footer-contact-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap; /* Si la pantalla es muy pequeña, baja el texto ordenadamente */
+    gap: 12px;
+    margin-top: 4px;
+}
+.footer-divider {
+    color: #cbd5e1;
+    font-weight: bold;
+}
+.modern-footer a {
+    color: var(--c-teal);
+    text-decoration: none;
+    font-weight: 800;
+    transition: 0.2s;
+}
+.modern-footer a:hover {
+    color: var(--c-blue-accent);
+    text-decoration: underline;
+}
+
+/* Ocultar el separador (•) en celulares muy pequeños para que no se vea feo si se apila */
+@media (max-width: 480px) {
+    .footer-divider {
+        display: none;
+    }
+    .footer-contact-info {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
