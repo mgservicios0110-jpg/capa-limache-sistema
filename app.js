@@ -919,7 +919,12 @@ async function generarReporteOficial(tipo) {
         tableHTML += '</tbody></table>';
     }
 
-    // ABRIMOS LA VENTA DE VISTA PREVIA RESPONSIVA
+    // Obtenemos la ruta absoluta de tu servidor para el logo
+    const currentPath = window.location.href.split('?')[0].split('#')[0];
+    const basePath = currentPath.substring(0, currentPath.lastIndexOf('/'));
+    const logoUrl = basePath + '/logo.png';
+
+    // ABRIMOS LA VENTA DE VISTA PREVIA RESPONSIVA (DISEÑO INTACTO)
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
         <!DOCTYPE html>
@@ -946,7 +951,7 @@ async function generarReporteOficial(tipo) {
                 
                 /* ESTILOS INTERNOS DEL REPORTE */
                 .header { display: flex; align-items: center; border-bottom: 3px solid #00a89d; padding-bottom: 20px; margin-bottom: 30px; flex-wrap: wrap; gap: 20px; }
-                .header img { height: 70px; }
+                .header img { height: 70px; object-fit: contain; }
                 .header-text h1 { margin: 0; color: #002855; font-size: 22px; text-transform: uppercase; }
                 .header-text h2 { margin: 5px 0 0 0; color: #b92b82; font-size: 16px; }
                 .info-box { background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #e2e8f0; display:flex; flex-wrap: wrap; gap: 20px; }
@@ -987,7 +992,7 @@ async function generarReporteOficial(tipo) {
 
             <div class="page-container">
                 <div class="header">
-                    <img src="${window.location.origin}/logo.png" alt="Logo" onerror="this.style.display='none'">
+                    <img src="${logoUrl}" alt="Logo" onerror="this.style.display='none'">
                     <div class="header-text">
                         <h1>Centro de Capacitación</h1>
                         <h2>Informe Oficial de ${tipo === 'notas' ? 'Calificaciones' : 'Asistencia'}</h2>
